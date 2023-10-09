@@ -16,7 +16,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '14' 
+        node-version: '16' 
 
     - name: Install dependencies
       run: | 
@@ -64,9 +64,6 @@ jobs:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
       run: |
-        # Install SSH client (should be preinstalled on ubuntu-latest)
-        sudo apt-get install -y openssh-client
-
         # Save private key to a file
         echo "$PRIVATE_KEY" > private_key.pem
         chmod 600 private_key.pem
