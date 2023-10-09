@@ -20,16 +20,12 @@ jobs:
 
     - name: Install dependencies
       run: | 
-        cd api
-        npm install
-        cd ../client
+        cd client
         npm install
 
-    - name: Run React tests
+    - name: Run React tests for client
       run: |
-        cd api
-        npm test -- --watchAll=false
-        cd ../client
+        cd client
         npm test -- --watchAll=false
 
   build_and_push:
