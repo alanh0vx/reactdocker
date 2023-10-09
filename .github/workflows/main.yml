@@ -27,7 +27,7 @@ jobs:
 
     - name: Run React tests
       run: |
-        cd ../api
+        cd api
         npm test -- --watchAll=false
         cd ../client
         npm test -- --watchAll=false
