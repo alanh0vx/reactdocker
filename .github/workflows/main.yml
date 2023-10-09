@@ -77,8 +77,6 @@ jobs:
         # SSH and deploy
         ssh -o StrictHostKeyChecking=no -i private_key.pem $USER@$HOST << EOF
           echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USERNAME" --password-stdin
-          rm -rf /home/devsecops/reactdemo
-          mkdir /home/devsecops/reactdemo
           cd /home/devsecops/reactdemo
           git pull origin main
           docker compose down
