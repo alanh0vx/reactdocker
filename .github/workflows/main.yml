@@ -21,6 +21,6 @@ jobs:
           cd api
           docker build -t alanh0/reactdocker_api:latest .
           docker push alanh0/reactdocker_api:latest 
-          cd client
+          cd ../client
           docker build -t alanh0/reactdocker_client:latest .
           docker push alanh0/reactdocker_client:latest 
