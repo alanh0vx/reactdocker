@@ -19,12 +19,21 @@ jobs:
         node-version: '14' 
 
     - name: Install dependencies
-      run: npm install
+      run: | 
+        cd api
+        npm install
+        cd ../client
+        npm install
 
     - name: Run React tests
-      run: npm test -- --watchAll=false
+      run: |
+        cd ../api
+        npm test -- --watchAll=false
+        cd ../client
+        npm test -- --watchAll=false
 
   build_and_push:
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
