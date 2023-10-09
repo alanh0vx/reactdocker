@@ -19,8 +19,8 @@ jobs:
       - name: Build and push Docker image
         run: |
           cd api
-          docker build -t alanh0/reactdocker_api:latest -t alanh0/reactdocker_api:latest .
-          docker push alanh0/reactdocker_api:latest .
+          docker build -t alanh0/reactdocker_api:latest .
+          docker push alanh0/reactdocker_api:latest 
           cd client
           docker build -t alanh0/reactdocker_client:latest .
           docker push alanh0/reactdocker_client:latest 
