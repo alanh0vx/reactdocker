@@ -79,6 +79,8 @@ jobs:
           echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USERNAME" --password-stdin
           cd /home/devsecops/reactdemo
           git pull origin main
+          docker compose down
           docker compose up -d
+          rm private_key.pem
         EOF
       shell: bash
