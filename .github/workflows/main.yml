@@ -1,4 +1,4 @@
-name: Push to Docker Hub
+name: Push to Docker Hub and Deploy to EC2
 
 on:
   push:
@@ -47,3 +47,38 @@ jobs:
           cd ../client
           docker build -t alanh0/reactdocker_client:latest .
           docker push alanh0/reactdocker_client:latest 
+
+  deploy:
+    needs: build_and_push
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v2
+
+    - name: Deploy to EC2
+      env:
+        PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+        HOST: ${{ secrets.EC2_HOST }}
+        USER: ${{ secrets.EC2_USER }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+      run: |
+        # Install SSH client (should be preinstalled on ubuntu-latest)
+        sudo apt-get install -y openssh-client
+
+        # Save private key to a file
+        echo "$PRIVATE_KEY" > private_key.pem
+        chmod 600 private_key.pem
+
+        # Transfer source code to EC2
+        rsync -avz -e "ssh -o StrictHostKeyChecking=no -i private_key.pem" ./ $USER@$HOST:/home/devsecops/reactdemo
+
+        # SSH and deploy
+        ssh -o StrictHostKeyChecking=no -i private_key.pem $USER@$HOST << EOF
+          echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USERNAME" --password-stdin
+          cd /home/devsecops/reactdemo
+          git pull origin main
+          docker compose up -d
+        EOF
+      shell: bash
