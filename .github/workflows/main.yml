@@ -74,7 +74,7 @@ jobs:
         chmod 600 private_key.pem
 
         # Transfer source code to EC2
-        rsync -avz -e "ssh -o StrictHostKeyChecking=no -i private_key.pem" ./ $USER@$HOST:/home/devsecops/reactdemo
+        rsync -avz -e "ssh -o StrictHostKeyChecking=no -i private_key.pem" ./ $USER@$HOST:/home/devsecops/reactdemo/reactdocker
 
         # SSH and deploy
         ssh -o StrictHostKeyChecking=no -i private_key.pem $USER@$HOST << EOF
@@ -84,5 +84,6 @@ jobs:
           git pull origin main
           docker compose down
           docker compose up -d
+          rm private_key.pem
         EOF
       shell: bash
