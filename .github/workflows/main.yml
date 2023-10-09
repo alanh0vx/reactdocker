@@ -84,6 +84,5 @@ jobs:
           git pull origin main
           docker compose down
           docker compose up -d
-          rm private_key.pem
         EOF
       shell: bash
