@@ -89,7 +89,7 @@ jobs:
       shell: bash
 
   zapscan:
-    needs: build_and_push
+    needs: deploy
     runs-on: ubuntu-latest
     steps:
     - name: ZAP Web Scan
