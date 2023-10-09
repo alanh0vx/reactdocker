@@ -1,4 +1,4 @@
-name: Push to Docker Hub and Deploy to EC2
+name: Devsecops Demo
 
 on:
   push:
@@ -87,3 +87,12 @@ jobs:
           rm private_key.pem
         EOF
       shell: bash
+
+  zapscan:
+    needs: build_and_push
+    runs-on: ubuntu-latest
+    steps:
+    - name: ZAP Web Scan
+      uses: zaproxy/action-baseline@v0.9.0
+      with:
+        target: 'https://devsecops.vxrl.org/'
