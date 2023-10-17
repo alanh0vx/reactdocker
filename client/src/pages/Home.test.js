@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import Home from './Home';
 
 test('renders learn react link', () => {
-  render(<App />);
+  render(<Home />);
   const linkElement = screen.getByText(/hello/i);
   expect(linkElement).toBeInTheDocument();
 });
