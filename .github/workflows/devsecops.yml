@@ -30,8 +30,7 @@ jobs:
 
   codeql_analyze:
     needs: test
-    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
-    timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
+    runs-on: ubuntu-lates
     permissions:
       actions: read
       contents: read
@@ -40,7 +39,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ $detected-codeql-languages ]
+        language: [ 'javascript' ]
         
     steps:
     - name: Checkout repository
