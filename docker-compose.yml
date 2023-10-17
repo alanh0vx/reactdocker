@@ -1,14 +1,14 @@
 version: '3.8'
 services:
   api:
-    image: alanh0/reactdocker_api
+    image: alanh0/reactdocker_api:${TAG:-latest}
     container_name: api_backend
     ports:
       - '4000:4000'
     volumes:
       - ./api:/app
   client:
-    image: alanh0/reactdocker_client
+    image: alanh0/reactdocker_client:${TAG:-latest}
     container_name: client_frontend
     ports:
       - '3000:3000'
