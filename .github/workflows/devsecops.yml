@@ -114,6 +114,7 @@ jobs:
           git remote set-url origin https://$GIT_USER:$GIT_TOKEN@github.com/alanh0vx/reactdocker
           git pull origin main
           docker compose down
+          docker compose pull
           docker compose up -d
           rm private_key.pem
         EOF
