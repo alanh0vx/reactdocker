@@ -57,9 +57,11 @@ jobs:
       uses: github/codeql-action/analyze@v2
       with:
         category: "/language:${{matrix.language}}"
-
+  
   build_and_push:
     needs: codeql_analyze
+    outputs:
+      tag: ${{ steps.set_tag.outputs.tag }}
     runs-on: ubuntu-latest
 
     steps:
@@ -68,18 +70,29 @@ jobs:
 
       - name: Login to Docker Hub
         run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-
+        
+      - name: Set dynamic tag
+        id: set_tag
+        run: |
+          TAG=$(date +'%Y%m%d%H%M%S')
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "::set-output name=tag::$TAG"
+            
       - name: Build and push Docker image (api)
         run: |
           cd api
-          docker build -t alanh0/reactdocker_api:latest .
-          docker push alanh0/reactdocker_api:latest 
+          docker build -t alanh0/reactdocker_api:${{ steps.set_tag.outputs.tag }} .
+          docker push alanh0/reactdocker_api:${{ steps.set_tag.outputs.tag }} 
+        env:
+          TAG: ${{ steps.set_tag.outputs.tag }}
           
       - name: Build and push Docker image (client)
         run: |
           cd client
-          docker build -t alanh0/reactdocker_client:latest .
-          docker push alanh0/reactdocker_client:latest 
+          docker build -t alanh0/reactdocker_client:${{ steps.set_tag.outputs.tag }} .
+          docker push alanh0/reactdocker_client:${{ steps.set_tag.outputs.tag }} 
+        env:
+          TAG: ${{ steps.set_tag.outputs.tag }}
 
   deploy:
     needs: build_and_push
@@ -112,6 +125,7 @@ jobs:
           cd /home/devsecops/reactdemo/reactdocker
           git remote set-url origin https://$GIT_USER:$GIT_TOKEN@github.com/alanh0vx/reactdocker
           git pull origin main
+          TAG=${{ needs.build_and_push.outputs.tag }}
           docker compose down
           docker compose up -d
           rm private_key.pem
