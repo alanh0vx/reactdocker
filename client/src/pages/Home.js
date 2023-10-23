@@ -7,7 +7,7 @@ function Home() {
       <header className="Home-header">
         <img src={logo} className="Home-logo" alt="logo" />
         <p>
-          VX - Auto Deploy Test, Hello world!!
+          VX - Auto Deploy Test, Hello world!! [updated!]
         </p>
       </header>
     </div>
